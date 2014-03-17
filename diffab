@@ -15,9 +15,8 @@
 #$diffab commit1 commit2
 
 # History
-# 2012/06/27	shaun.hong@lge.com	:+ add color table
-# 									 + tag, commit, branch
-# 2014/03/04	shaun.hong@lge.com  :+ Fixed related string for branch name
+# 2014/03/17	initial
+
 
 ##=============================================================================================
 ## Color Define
