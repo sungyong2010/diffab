@@ -1,8 +1,8 @@
 #!/bin/bash
 #Author	: sungyong2010@gmail.com
 #Date	: 2012-02-14
-#Program: diffab
-#Object	: valentine present
+#Program : diffab
+#Objectives : valentine present
 
 # Parameter Description
 # $1 : before commit, tag, branch
