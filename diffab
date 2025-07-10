@@ -1,8 +1,8 @@
 #!/bin/bash
 #Author	: sungyong2010@gmail.com
 #Date	: 2012-02-14
-#Program : diffab
-#Objectives : valentine present
+#Program: diffab
+#Object	: valentine present
 
 # Parameter Description
 # $1 : before commit, tag, branch
@@ -14,6 +14,9 @@
 #$diffab commit1
 #$diffab commit1 commit2
 
+# History
+# 2012/06/27	shaun.hong@lge.com	:+ add color table
+# 									 + tag, commit, branch
 
 ##=============================================================================================
 ## Color Define
@@ -30,8 +33,8 @@ CWD=$(pwd)
 function diffab()
 {
 	#backup current branch to restore
-	CURRENT_BRANCH=`git status | grep 'On branch' | cut -f4 -d" "`
-	echo "Current Branch is" ${CURRENT_BRANCH}
+	CURRENT_BRANCH=`git symbolic-ref --short HEAD`
+	echo Current Branch is $CURRENT_BRANCH
 
 	#check commit b,a and make temp a,b branch
 	if [ -z $1 ]; then
@@ -62,7 +65,8 @@ function diffab()
 
 	#backup directory
 	#diff=$CWD/../diff
-	diff=${HOME}/diff
+	# diff=${HOME}/diff
+	diff=diff
 	echo diff path: $diff
 	if [ -e $diff ]; then
 		echo -e ${BLUE}"Already exist diff directory in your parent path."${NCOL}
@@ -83,30 +87,29 @@ function diffab()
 
 	#packing
 	cd ${git_root}
-	echo -e ${CYAN}"Generating before, after zip file..."
+	echo -e ${CYAN}"Generating before, after 7z file..."
 	git checkout -f after 
-	cat $diff/diff.list | xargs zip $diff/after.zip
+	cat $diff/diff.list | xargs 7z a ${diff}/after.7z
 	git checkout -f before
-	cat $diff/diff.list | xargs zip $diff/before.zip
+	cat $diff/diff.list | xargs 7z a ${diff}/before.7z
 	echo -e ${CYAN}${NCOL}
 	cd -
 
 	#delete temp branch
-	git checkout --force ${CURRENT_BRANCH}
+	git checkout $CURRENT_BRANCH
 	git branch -D before
 	git branch -D after
 
 	#make readme.txt
-	README=$diff/readme.txt
-
-	echo "[Diff path(git project)]" > $README
+	README=${diff}/readme.txt
+	echo "[Diff path(git project)]" > ${README}
 	echo "-------------------------------------------------------" >> $README
 	git config --list | grep projectname | cut -f 3 -d. >> $README
 	echo "" >> $README 
 	echo "" >> $README 
 	echo "[Diff file list]" >> $README
 	echo "-------------------------------------------------------" >> $README
-	todos $diff/diff.list
+	# todos $diff/diff.list
 	cat $diff/diff.list >> $README
 	rm -rf $diff/diff.list
 	echo "" >> $README 
@@ -122,7 +125,7 @@ function diffab()
 	git diff ${b_commit} ${a_commit} > $diff/diff.patch
 
 	#convert DOS style(for windows env)
-	todos $README
+	# todos $README
 
 	#thank you
 	echo "Thank you for using diffab!!"
